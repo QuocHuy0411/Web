@@ -1,0 +1,61 @@
+/* ===== CSS Variables cho 2 theme ===== */
+:root {
+  /* Light mode */
+  --bg-page:       #eef0f8;
+  --bg-header:     #ffffff;
+  --bg-card:       #ffffff;
+  --bg-card-hover: #f5f4ff;
+  --bg-input:      #ffffff;
+  --text-primary:  #1a1a2e;
+  --text-secondary:#6b7280;
+  --text-date:     #9ca3af;
+  --border-card:   #e5e7eb;
+  --border-input:  #d1d5db;
+  --btn-add-bg:    #7c3aed;
+  --btn-add-hover: #6d28d9;
+  --btn-del-bg:    #fee2e2;
+  --btn-del-text:  #dc2626;
+  --btn-del-hover: #fecaca;
+  --badge-bg:      #f3f4f6;
+  --badge-text:    #374151;
+  --theme-btn-bg:  #f3f4f6;
+  --shadow-card:   0 1px 3px rgba(0,0,0,0.06);
+}
+
+/* Dark mode — kích hoạt khi <body> có class "dark" */
+body.dark {
+  --bg-page:       #0f0f1a;
+  --bg-header:     #1a1a2e;
+  --bg-card:       #1e1e30;
+  --bg-card-hover: #252540;
+  --bg-input:      #252540;
+  --text-primary:  #f1f1f5;
+  --text-secondary:#a0aec0;
+  --text-date:     #718096;
+  --border-card:   #2d2d4a;
+  --border-input:  #3d3d5c;
+  --btn-add-bg:    #7c3aed;
+  --btn-add-hover: #6d28d9;
+  --btn-del-bg:    #3d1515;
+  --btn-del-text:  #f87171;
+  --btn-del-hover: #4d1a1a;
+  --badge-bg:      #2d2d4a;
+  --badge-text:    #a0aec0;
+  --theme-btn-bg:  #2d2d4a;
+  --shadow-card:   0 1px 4px rgba(0,0,0,0.3);
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
