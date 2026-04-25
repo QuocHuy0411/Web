@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buổi 06 — Đăng ký người dùng</title>
+    <style>
+      /* ── Reset & Base ─────────────────────────────────────── */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        background: #f0f2f5;
+        color: #1a1a2e;
+        min-height: 100vh;
+        padding: 32px 16px;
+      }
+
+      /* ── Page header ──────────────────────────────────────── */
+      .page-header {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+      .page-header .badge {
+        display: inline-block;
+        background: #0d9488;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 99px;
+        margin-bottom: 10px;
+      }
+      .page-header h1 {
+        font-size: 1.7rem;
+        font-weight: 800;
+        color: #0f172a;
+      }
+      .page-header p {
+        margin-top: 6px;
+        color: #64748b;
+        font-size: 0.9rem;
+      }
+
+      /* ── Card wrapper ─────────────────────────────────────── */
+      .card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px rgba(0,0,0,.08);
+        padding: 28px 32px;
+        max-width: 960px;
+        margin: 0 auto 24px;
+      }
+      .card-title {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+        color: #0d9488;
+        margin-bottom: 20px;
+      }
+
+      /* ── Two-column grid ──────────────────────────────────── */
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+      }
+      @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+
+      /* ── Form section ─────────────────────────────────────── */
+      .form-section h2 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: .8px;
+        text-transform: uppercase;
+        color: #0d9488;
+        margin-bottom: 16px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #e2e8f0;
+      }
+
+      label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #475569;
+        margin-bottom: 4px;
+      }
+      input[type="text"],
+      input[type="number"],
+      input[type="email"] {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        color: #0f172a;
+        background: #f8fafc;
+        transition: border-color .2s, box-shadow .2s;
+        margin-bottom: 14px;
+        outline: none;
+      }
+      input:focus {
+        border-color: #0d9488;
+        box-shadow: 0 0 0 3px rgba(13,148,136,.12);
+        background: #fff;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        background: #0d9488;
+        color: #fff;
+        font-size: 0.95rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background .2s, transform .1s;
+        margin-top: 4px;
+      }
+      button:hover { background: #0f766e; }
+      button:active { transform: scale(.98); }
+      button:disabled { background: #94a3b8; cursor: not-allowed; }
+
+      /* ── Result box ───────────────────────────────────────── */
+      .result-box {
+        margin-top: 14px;
+        padding: 14px;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        font-family: 'Courier New', monospace;
+        min-height: 70px;
+        border: 1.5px solid #e2e8f0;
+        background: #f8fafc;
+        color: #475569;
+        white-space: pre-wrap;
+        word-break: break-word;
+        transition: all .2s;
+      }
+      .result-box.success {
+        border-color: #6ee7b7;
+        background: #f0fdf4;
+        color: #065f46;
+      }
+      .result-box.error {
+        border-color: #fca5a5;
+        background: #fff1f2;
+        color: #b91c1c;
+      }
+      .result-box.loading {
+        border-color: #93c5fd;
+        background: #eff6ff;
+        color: #1e40af;
+        font-style: italic;
+      }
+
+      /* ── Console log ──────────────────────────────────────── */
+      .console-section { margin-top: 24px; }
+      .console-section h2 {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+        color: #94a3b8;
+        margin-bottom: 10px;
+      }
+      .console-log {
+        background: #0f172a;
+        color: #94a3b8;
+        border-radius: 10px;
+        padding: 16px 20px;
+        min-height: 80px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.8rem;
+        line-height: 1.8;
+      }
+      .console-log .log-line { display: block; }
+      .console-log .log-line .time { color: #64748b; }
+      .console-log .log-line .method-get { color: #4ade80; }
+      .console-log .log-line .method-post { color: #60a5fa; }
+      .console-log .log-line .path { color: #f8fafc; }
+
+      /* ── Info note ────────────────────────────────────────── */
+      .note {
+        max-width: 960px;
+        margin: 0 auto;
+        background: #fffbeb;
+        border: 1.5px solid #fde68a;
+        border-radius: 10px;
+        padding: 14px 20px;
+        font-size: 0.82rem;
+        color: #78350f;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="badge">Buổi 06 — Bài tập thực hành</div>
+      <h1>Xây dựng server + form đăng ký người dùng</h1>
+      <p>Node.js · Express · Middleware · Routing · HTML + Fetch API</p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="card">
+      <div class="card-title">Demo — Form gọi API</div>
+
+      <div class="grid-2">
+
+        <!-- ═══ FORM 1: GET /api/info ═══ -->
+        <div class="form-section">
+          <h2>Form 1 — GET /api/info</h2>
+
+          <label for="info-name">Tên</label>
+          <input type="text" id="info-name" placeholder="Nhập tên..." />
+
+          <label for="info-age">Tuổi</label>
+          <input type="number" id="info-age" placeholder="Nhập tuổi..." min="0" />
+
+          <button id="btn-info" onclick="handleGetInfo()">Gửi GET /api/info</button>
+
+          <div class="result-box" id="result-info">Kết quả hiện ở đây...</div>
+        </div>
+
+        <!-- ═══ FORM 2: POST /api/register ═══ -->
+        <div class="form-section">
+          <h2>Form 2 — POST /api/register</h2>
+
+          <label for="reg-name">Tên</label>
+          <input type="text" id="reg-name" placeholder="Nhập tên..." />
+
+          <label for="reg-age">Tuổi</label>
+          <input type="number" id="reg-age" placeholder="Nhập tuổi..." min="0" />
+
+          <label for="reg-email">Email</label>
+          <input type="email" id="reg-email" placeholder="Nhập email..." />
+
+          <button id="btn-register" onclick="handlePostRegister()">Gửi POST /api/register</button>
+
+          <div class="result-box" id="result-register">Kết quả hiện ở đây...</div>
+        </div>
+
+      </div>
+
+      <!-- Console Log section -->
+      <div class="console-section">
+        <h2>Console Log — Middleware logger (client-side)</h2>
+        <div class="console-log" id="console-log">
+          <span class="log-line" style="color:#475569">// Log sẽ hiện ở đây khi bạn gửi request...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Note -->
+    <div class="note">
+      <strong>Lưu ý:</strong> Trang này gọi API thật đến Express server đang chạy trên máy của bạn.
+      Hãy chắc chắn đã chạy <code>node index.js</code> trước khi dùng form.
+    </div>
+
+    <script>
+      // ── Helpers ───────────────────────────────────────────────────────────
+
+      /**
+       * Hiển thị kết quả vào result box
+       * @param {string} boxId  - ID của div kết quả
+       * @param {object|string} data - Dữ liệu cần hiển thị
+       * @param {'success'|'error'|'loading'|''} type
+       */
+      function showResult(boxId, data, type = '') {
+        const box = document.getElementById(boxId);
+        box.className = 'result-box ' + type;
+        box.textContent = typeof data === 'string'
+          ? data
+          : JSON.stringify(data, null, 2);
+      }
+
+      /**
+       * Thêm dòng log vào console box
+       * @param {string} method - 'GET' | 'POST'
+       * @param {string} path   - đường dẫn
+       */
+      function addLog(method, path) {
+        const consoleEl = document.getElementById('console-log');
+        // Xoá placeholder nếu có
+        if (consoleEl.children.length === 1 && consoleEl.children[0].style.color === 'rgb(71, 85, 105)') {
+          consoleEl.innerHTML = '';
+        }
+        const now = new Date().toLocaleTimeString('vi-VN');
+        const methodClass = method === 'GET' ? 'method-get' : 'method-post';
+        const line = document.createElement('span');
+        line.className = 'log-line';
+        line.innerHTML =
+          `<span class="time">[${now}]</span> ` +
+          `<span class="${methodClass}">${method}</span> ` +
+          `<span class="path">${path}</span>`;
+        consoleEl.appendChild(line);
+        consoleEl.scrollTop = consoleEl.scrollHeight;
+      }
+
+      // ── FORM 1: GET /api/info ─────────────────────────────────────────────
+
+      async function handleGetInfo() {
+        // Lấy giá trị input
+        const name = document.getElementById('info-name').value.trim();
+        const age  = document.getElementById('info-age').value.trim();
+
+        // Client-side validation nhanh
+        if (!name || !age) {
+          showResult('result-info', 'Vui lòng nhập đầy đủ Tên và Tuổi.', 'error');
+          return;
+        }
+
+        // Hiện trạng thái loading
+        showResult('result-info', 'Đang gửi request...', 'loading');
+        document.getElementById('btn-info').disabled = true;
+
+        // Tạo URL với query string
+        const url = `/api/info?name=${encodeURIComponent(name)}&age=${encodeURIComponent(age)}`;
+        addLog('GET', `/api/info?name=${name}&age=${age}`);
+
+        try {
+          // Gọi API bằng fetch — KHÔNG reload trang
+          const response = await fetch(url);
+          const data = await response.json();
+
+          if (response.ok) {
+            showResult('result-info', data, 'success');
+          } else {
+            showResult('result-info', data, 'error');
+          }
+        } catch (err) {
+          showResult('result-info', `Lỗi kết nối: ${err.message}\nHãy chắc chắn server đang chạy.`, 'error');
+        } finally {
+          document.getElementById('btn-info').disabled = false;
+        }
+      }
+
+      // ── FORM 2: POST /api/register ────────────────────────────────────────
+
+      async function handlePostRegister() {
+        const name  = document.getElementById('reg-name').value.trim();
+        const age   = document.getElementById('reg-age').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+
+        if (!name || !age || !email) {
+          showResult('result-register', 'Vui lòng nhập đầy đủ Tên, Tuổi và Email.', 'error');
+          return;
+        }
+
+        showResult('result-register', 'Đang gửi request...', 'loading');
+        document.getElementById('btn-register').disabled = true;
+
+        addLog('POST', '/api/register');
+
+        try {
+          const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, age: Number(age), email }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            showResult('result-register', data, 'success');
+          } else {
+            showResult('result-register', data, 'error');
+          }
+        } catch (err) {
+          showResult('result-register', `Lỗi kết nối: ${err.message}\nHãy chắc chắn server đang chạy.`, 'error');
+        } finally {
+          document.getElementById('btn-register').disabled = false;
+        }
+      }
+
+      // ── Enter key support ─────────────────────────────────────────────────
+      document.getElementById('info-age').addEventListener('keydown', e => {
+        if (e.key === 'Enter') handleGetInfo();
+      });
+      document.getElementById('reg-email').addEventListener('keydown', e => {
+        if (e.key === 'Enter') handlePostRegister();
+      });
+    </script>
+  </body>
+</html>

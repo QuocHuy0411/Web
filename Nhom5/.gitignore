@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Environment variables (chứa thông tin nhạy cảm, không commit lên Git)
+.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
